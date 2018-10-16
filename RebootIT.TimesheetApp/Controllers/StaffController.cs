@@ -144,6 +144,12 @@ namespace RebootIT.TimesheetApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Timesheets(int id)
+        {
+            var timesheetDbContext = _context.Timesheets.Include(t => t.Client).Include(t => t.Location).Include(t => t.Staff).Where(t => t.StaffId == id);
+            return View(await timesheetDbContext.ToListAsync());
+        }
+
         private bool StaffExists(int id)
         {
             return _context.Staff.Any(e => e.Id == id);
